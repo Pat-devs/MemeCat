@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using MemeCat.Models
 @using MemeCat.Services
+@using System.Linq;
 @inject CatService CatService
 
 @rendermode InteractiveServer
@@ -61,14 +62,7 @@ else
     protected override void OnInitialized()
     {
         cats = CatService.GetCats();
-        foreach (var cat in cats)
-        {
-            foreach (var emotion in cat.EmotionTags)
-            {
-                uniqueEmotions.Add(emotion);
-            }
-        }
-
+        uniqueEmotions = new HashSet<string>(cats.SelectMany(cat => cat.EmotionTags).Distinct());
     }
 }
 
